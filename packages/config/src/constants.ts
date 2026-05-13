@@ -1,0 +1,32 @@
+export const SLOT_DURATION_MINUTES = 60
+export const SLOT_HOLD_SECONDS = 90
+export const DEFAULT_SLOTS_START_HOUR = 7
+export const DEFAULT_SLOTS_END_HOUR = 23
+
+export const ROLES = {
+  PLAYER: 'PLAYER',
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+} as const
+
+export const BOOKING_STATUS = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED',
+  COMPLETED: 'COMPLETED',
+  NO_SHOW: 'NO_SHOW',
+} as const
+
+export const SLOT_STATUS = {
+  AVAILABLE: 'AVAILABLE',
+  BOOKED: 'BOOKED',
+  BLOCKED: 'BLOCKED',
+  MAINTENANCE: 'MAINTENANCE',
+} as const
+
+export const COURT_SURFACE = {
+  GRASS: 'GRASS',
+  ARTIFICIAL_GRASS: 'ARTIFICIAL_GRASS',
+  CONCRETE: 'CONCRETE',
+  FUTSAL: 'FUTSAL',
+} as const

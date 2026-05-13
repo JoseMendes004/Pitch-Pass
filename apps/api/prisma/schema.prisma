@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PLAYER
+  OWNER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum SlotStatus {
+  AVAILABLE
+  BOOKED
+  BLOCKED
+  MAINTENANCE
+}
+
+enum CourtSurface {
+  GRASS
+  ARTIFICIAL_GRASS
+  CONCRETE
+  FUTSAL
+}
+
+model User {
+  id          String   @id @default(cuid())
+  firebaseUid String   @unique @map("firebase_uid")
+  email       String   @unique
+  displayName String   @map("display_name")
+  avatarUrl   String?  @map("avatar_url")
+  phone       String?
+  role        Role     @default(PLAYER)
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  ownedCourts Court[]   @relation("CourtOwner")
+  bookings    Booking[]
+
+  @@map("users")
+}
+
+model Court {
+  id           String       @id @default(cuid())
+  ownerId      String       @map("owner_id")
+  name         String
+  description  String?
+  address      String
+  city         String
+  latitude     Float?
+  longitude    Float?
+  surface      CourtSurface @default(ARTIFICIAL_GRASS)
+  maxPlayers   Int          @default(10) @map("max_players")
+  pricePerHour Decimal      @map("price_per_hour") @db.Decimal(10, 2)
+  imageUrls    String[]     @map("image_urls")
+  amenities    String[]
+  isActive     Boolean      @default(true) @map("is_active")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  owner     User       @relation("CourtOwner", fields: [ownerId], references: [id])
+  timeSlots TimeSlot[]
+
+  @@index([city])
+  @@index([ownerId])
+  @@map("courts")
+}
+
+model TimeSlot {
+  id            String     @id @default(cuid())
+  courtId       String     @map("court_id")
+  startsAt      DateTime   @map("starts_at")
+  endsAt        DateTime   @map("ends_at")
+  status        SlotStatus @default(AVAILABLE)
+  priceOverride Decimal?   @map("price_override") @db.Decimal(10, 2)
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  court   Court    @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  booking Booking?
+
+  @@unique([courtId, startsAt])
+  @@index([courtId, startsAt, endsAt])
+  @@index([status])
+  @@map("time_slots")
+}
+
+model Booking {
+  id           String        @id @default(cuid())
+  userId       String        @map("user_id")
+  timeSlotId   String        @unique @map("time_slot_id")
+  status       BookingStatus @default(CONFIRMED)
+  totalAmount  Decimal       @map("total_amount") @db.Decimal(10, 2)
+  notes        String?
+  qrCode       String?       @unique @map("qr_code")
+  confirmedAt  DateTime?     @map("confirmed_at")
+  cancelledAt  DateTime?     @map("cancelled_at")
+  cancelReason String?       @map("cancel_reason")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  user     User     @relation(fields: [userId], references: [id])
+  timeSlot TimeSlot @relation(fields: [timeSlotId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("bookings")
+}

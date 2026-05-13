@@ -1,0 +1,39 @@
+{
+  "name": "@pitch-pass/web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pitch-pass/config": "workspace:*",
+    "@pitch-pass/types": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "^1.7.0",
+    "clsx": "^2.1.0",
+    "firebase": "^10.0.0",
+    "next": "^14.2.0",
+    "next-themes": "^0.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "recharts": "^3.8.1",
+    "socket.io-client": "^4.7.0",
+    "sonner": "^1.5.0",
+    "tailwind-merge": "^2.3.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.5.0"
+  }
+}

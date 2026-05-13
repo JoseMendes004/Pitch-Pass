@@ -1,0 +1,25 @@
+{
+  "name": "pitch-pass",
+  "private": true,
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@11.0.9",
+  "scripts": {
+    "dev:api": "pnpm --filter @pitch-pass/api dev",
+    "dev:web": "pnpm --filter @pitch-pass/web dev",
+    "dev:mobile": "pnpm --filter @pitch-pass/mobile start",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "db:push": "pnpm --filter @pitch-pass/api prisma db push",
+    "db:migrate": "pnpm --filter @pitch-pass/api prisma migrate dev",
+    "db:studio": "pnpm --filter @pitch-pass/api prisma studio",
+    "db:generate": "pnpm --filter @pitch-pass/api prisma generate"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0"
+  }
+}
